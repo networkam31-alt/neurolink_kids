@@ -77,6 +77,19 @@ class AppState extends ChangeNotifier {
 
   final List<MedicalReport> medicalReports = [];
 
+  int stars = 0;
+
+  void addStars(int n) {
+    if (n <= 0) return;
+    stars += n;
+    notifyListeners();
+  }
+
+  void resetStars() {
+    stars = 0;
+    notifyListeners();
+  }
+
   void setRole(UserRole r) {
     role = r;
     notifyListeners();

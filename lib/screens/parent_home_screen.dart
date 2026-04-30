@@ -51,13 +51,22 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
   }
 
   List<Widget> _activitiesContent(BuildContext context) {
+    final stars = AppStateScope.of(context).stars;
     return [
       _RetakeAssessmentBanner(onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => const AssessmentScreen(),
         ));
       }),
-      const SizedBox(height: 16),
+      const SizedBox(height: 14),
+      _StarsTotalCard(stars: stars),
+      const SizedBox(height: 14),
+      _QuestionsBanner(onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => const AssessmentScreen(),
+        ));
+      }),
+      const SizedBox(height: 18),
       _SectionHeader(title: 'Vidéos', onSeeAll: () {}),
       const SizedBox(height: 8),
       SizedBox(
@@ -97,6 +106,8 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
           );
         },
       ),
+      const SizedBox(height: 18),
+      const _FooterTiles(),
     ];
   }
 
@@ -391,11 +402,11 @@ class _ActivityCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          gradient: item.gradient,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(22),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.08),
+              color: Colors.black.withOpacity(0.06),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -406,11 +417,11 @@ class _ActivityCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              width: 50,
-              height: 50,
+              width: 56,
+              height: 56,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.25),
-                borderRadius: BorderRadius.circular(14),
+                gradient: item.iconGradient,
+                borderRadius: BorderRadius.circular(16),
               ),
               child: Icon(item.icon, color: Colors.white, size: 28),
             ),
@@ -419,24 +430,243 @@ class _ActivityCard extends StatelessWidget {
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
+                    color: Color(0xFF1F2937),
+                    fontSize: 15,
                     fontWeight: FontWeight.w900)),
-            const SizedBox(height: 6),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.25),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(item.tag,
-                  style: const TextStyle(
+            const SizedBox(height: 4),
+            Text(item.subtitle,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    color: Color(0xFF6B7280),
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _StarsTotalCard extends StatelessWidget {
+  final int stars;
+  const _StarsTotalCard({required this.stars});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFBBF24), Color(0xFFF97316)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFFBBF24).withOpacity(0.35),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 42,
+            height: 42,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.25),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Icon(Icons.star_rounded,
+                color: Colors.white, size: 26),
+          ),
+          const SizedBox(width: 12),
+          const Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Mes étoiles',
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 11,
-                      fontWeight: FontWeight.w800)),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    )),
+                SizedBox(height: 2),
+                Text('Tu progresses bien !',
+                    style: TextStyle(color: Colors.white, fontSize: 11)),
+              ],
+            ),
+          ),
+          Text('$stars',
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 28,
+                fontWeight: FontWeight.w900,
+              )),
+          const SizedBox(width: 4),
+          const Text('★',
+              style: TextStyle(color: Colors.white, fontSize: 24)),
+        ],
+      ),
+    );
+  }
+}
+
+class _QuestionsBanner extends StatelessWidget {
+  final VoidCallback onTap;
+  const _QuestionsBanner({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFBBF24), Color(0xFFFB923C)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFFFB923C).withOpacity(0.3),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
             ),
           ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.25),
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: const Icon(Icons.help_outline_rounded,
+                  color: Colors.white, size: 28),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Questions d'entraînement",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                      )),
+                  SizedBox(height: 2),
+                  Text(
+                    "S'entraîner avant l'évaluation",
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.white),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FooterTiles extends StatelessWidget {
+  const _FooterTiles();
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        _FooterTile(
+          icon: Icons.support_agent_rounded,
+          label: 'Contact',
+          gradient: const LinearGradient(
+            colors: [Color(0xFF60A5FA), Color(0xFF818CF8)],
+          ),
+          onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('contact@neurolink-kids.example'),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        _FooterTile(
+          icon: Icons.help_rounded,
+          label: 'Aide',
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFBBF24), Color(0xFFF97316)],
+          ),
+          onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                  "Pour de l'aide, écrivez-nous via Contact."),
+            ),
+          ),
+        ),
+        const SizedBox(width: 8),
+        _FooterTile(
+          icon: Icons.settings_rounded,
+          label: 'Paramètres',
+          gradient: const LinearGradient(
+            colors: [Color(0xFFEC4899), Color(0xFFA855F7)],
+          ),
+          onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Paramètres à venir.'),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FooterTile extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Gradient gradient;
+  final VoidCallback onTap;
+  const _FooterTile({
+    required this.icon,
+    required this.label,
+    required this.gradient,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        child: AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              gradient: gradient,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: Colors.white, size: 32),
+                const SizedBox(height: 6),
+                Text(label,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                    )),
+              ],
+            ),
+          ),
         ),
       ),
     );

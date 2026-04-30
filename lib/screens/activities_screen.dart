@@ -48,43 +48,45 @@ class ActivitiesScreen extends StatelessWidget {
                         ),
                         child: Container(
                           decoration: BoxDecoration(
-                            gradient: a.gradient,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(22),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.06),
+                                blurRadius: 10,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                width: 50,
-                                height: 50,
+                                width: 56,
+                                height: 56,
                                 decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.25),
-                                  borderRadius: BorderRadius.circular(14),
+                                  gradient: a.iconGradient,
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: Icon(a.icon,
                                     color: Colors.white, size: 28),
                               ),
                               const Spacer(),
                               Text(a.title,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
+                                      color: Color(0xFF1F2937),
+                                      fontSize: 15,
                                       fontWeight: FontWeight.w900)),
-                              const SizedBox(height: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.25),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(a.tag,
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w800)),
-                              ),
+                              const SizedBox(height: 4),
+                              Text(a.subtitle,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                      color: Color(0xFF6B7280),
+                                      fontSize: 12)),
                             ],
                           ),
                         ),
