@@ -350,6 +350,15 @@ class _FamilyOrderGameState extends State<_FamilyOrderGame> {
             });
           }
         });
+      } else {
+        Future.delayed(const Duration(milliseconds: 1200), () {
+          if (mounted) {
+            setState(() {
+              _placed.clear();
+              _shuffled = [..._orderLabels]..shuffle();
+            });
+          }
+        });
       }
     }
   }

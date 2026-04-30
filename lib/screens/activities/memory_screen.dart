@@ -100,7 +100,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final cols = _grid <= 4 ? 2 : (_grid <= 9 ? 3 : 4);
+    final cols = _grid <= 4 ? 2 : 4;
     return ActivityShell(
       title: 'Memory Cards',
       titleColor: const Color(0xFF7C3AED),
