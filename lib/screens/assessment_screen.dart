@@ -2,24 +2,26 @@ import 'package:flutter/material.dart';
 
 import '../app_theme.dart';
 import '../widgets/kids_background.dart';
-import '../widgets/primary_button.dart';
-import 'home_shell.dart';
+import 'assessment_results_screen.dart';
 
-class _Category {
+class AssessmentCategory {
   final String title;
   final IconData icon;
+  final Color color;
   final List<String> questions;
-  const _Category({
+  const AssessmentCategory({
     required this.title,
     required this.icon,
+    required this.color,
     required this.questions,
   });
 }
 
-const _categories = <_Category>[
-  _Category(
-    title: 'Communication et interaction',
-    icon: Icons.chat_bubble_outline,
+const assessmentCategories = <AssessmentCategory>[
+  AssessmentCategory(
+    title: 'Communication sociale',
+    icon: Icons.groups_2_rounded,
+    color: Color(0xFF22C55E),
     questions: [
       'A-t-il/elle des difficultés à maintenir un contact visuel ?',
       'Répond-il/elle à son prénom quand on l\'appelle ?',
@@ -33,9 +35,10 @@ const _categories = <_Category>[
       "Joue-t-il/elle de manière coopérative avec d'autres enfants ?",
     ],
   ),
-  _Category(
+  AssessmentCategory(
     title: 'Comportements et routines',
-    icon: Icons.repeat,
+    icon: Icons.chat_bubble_rounded,
+    color: Color(0xFF3B82F6),
     questions: [
       "Insiste-t-il/elle sur des routines précises ?",
       "Réagit-il/elle fortement aux changements ?",
@@ -49,9 +52,10 @@ const _categories = <_Category>[
       "Réagit-il/elle violemment aux interruptions ?",
     ],
   ),
-  _Category(
+  AssessmentCategory(
     title: 'Sensibilité sensorielle',
     icon: Icons.headphones,
+    color: Color(0xFF334155),
     questions: [
       "Couvre-t-il/elle ses oreilles aux sons forts ?",
       "Refuse-t-il/elle certains vêtements à cause de leur texture ?",
@@ -65,25 +69,10 @@ const _categories = <_Category>[
       "Semble-t-il/elle peu sensible à la douleur ou à la chaleur ?",
     ],
   ),
-  _Category(
-    title: 'Vie quotidienne et développement',
-    icon: Icons.auto_awesome,
-    questions: [
-      "Mange-t-il/elle de manière autonome ?",
-      "S'habille-t-il/elle seul(e) ?",
-      "Dort-il/elle de façon stable ?",
-      "A-t-il/elle du mal à se concentrer ?",
-      "Apprend-il/elle facilement de nouvelles compétences ?",
-      "Termine-t-il/elle les tâches commencées ?",
-      "Suit-il/elle des consignes en plusieurs étapes ?",
-      "Gère-t-il/elle les transitions entre activités ?",
-      "Présente-t-il/elle un retard de motricité fine ?",
-      "Présente-t-il/elle un retard de motricité globale ?",
-    ],
-  ),
-  _Category(
-    title: 'Émotions et social',
-    icon: Icons.favorite_outline,
+  AssessmentCategory(
+    title: 'Régulation émotionnelle',
+    icon: Icons.favorite_rounded,
+    color: Color(0xFFEC4899),
     questions: [
       "Exprime-t-il/elle clairement ses émotions ?",
       "Identifie-t-il/elle les émotions des autres ?",
@@ -95,6 +84,23 @@ const _categories = <_Category>[
       "Joue-t-il/elle à des jeux d'imagination ?",
       "Comprend-il/elle les règles sociales de base ?",
       "Préfère-t-il/elle jouer seul(e) ?",
+    ],
+  ),
+  AssessmentCategory(
+    title: 'Vie quotidienne et développement',
+    icon: Icons.auto_awesome,
+    color: Color(0xFF22C55E),
+    questions: [
+      "Mange-t-il/elle de manière autonome ?",
+      "S'habille-t-il/elle seul(e) ?",
+      "Dort-il/elle de façon stable ?",
+      "A-t-il/elle du mal à se concentrer ?",
+      "Apprend-il/elle facilement de nouvelles compétences ?",
+      "Termine-t-il/elle les tâches commencées ?",
+      "Suit-il/elle des consignes en plusieurs étapes ?",
+      "Gère-t-il/elle les transitions entre activités ?",
+      "Présente-t-il/elle un retard de motricité fine ?",
+      "Présente-t-il/elle un retard de motricité globale ?",
     ],
   ),
 ];
@@ -119,17 +125,17 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   final Map<int, int> _responses = {};
 
   int get _total =>
-      _categories.fold(0, (sum, c) => sum + c.questions.length);
+      assessmentCategories.fold(0, (sum, c) => sum + c.questions.length);
 
-  ({_Category cat, int qInCat}) _locate(int globalIndex) {
+  ({AssessmentCategory cat, int qInCat}) _locate(int globalIndex) {
     int remaining = globalIndex;
-    for (final c in _categories) {
+    for (final c in assessmentCategories) {
       if (remaining < c.questions.length) {
         return (cat: c, qInCat: remaining);
       }
       remaining -= c.questions.length;
     }
-    return (cat: _categories.last, qInCat: _categories.last.questions.length - 1);
+    return (cat: assessmentCategories.last, qInCat: assessmentCategories.last.questions.length - 1);
   }
 
   void _select(int answerIdx) {
@@ -147,52 +153,19 @@ class _AssessmentScreenState extends State<AssessmentScreen> {
   }
 
   void _finish() {
-    final score = _responses.values.fold<int>(0, (s, v) => s + v);
-    final maxScore = _total * 4;
-    final ratio = score / maxScore;
-    final level = ratio < 0.25
-        ? 'Très faibles signes'
-        : ratio < 0.5
-            ? 'Signes légers'
-            : ratio < 0.75
-                ? 'Signes modérés'
-                : 'Signes marqués';
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Évaluation terminée'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Score : $score / $maxScore'),
-            const SizedBox(height: 6),
-            Text('Indication : $level',
-                style: const TextStyle(fontWeight: FontWeight.w800)),
-            const SizedBox(height: 10),
-            const Text(
-              "Cette indication n'est pas un diagnostic. Consultez un professionnel pour une évaluation officielle.",
-              style: TextStyle(color: AppColors.textMuted, fontSize: 12),
-            ),
-          ],
-        ),
-        actions: [
-          PrimaryButton(
-            label: "Continuer vers l'application",
-            icon: Icons.home,
-            gradient: AppColors.orangeGradient,
-            onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const HomeShell()),
-                (_) => false,
-              );
-            },
-          ),
-        ],
+    final perCategory = <AssessmentCategory, int>{};
+    int globalIndex = 0;
+    for (final c in assessmentCategories) {
+      int s = 0;
+      for (int i = 0; i < c.questions.length; i++) {
+        s += _responses[globalIndex] ?? 0;
+        globalIndex++;
+      }
+      perCategory[c] = s;
+    }
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => AssessmentResultsScreen(scores: perCategory),
       ),
     );
   }

@@ -7,6 +7,7 @@ import '../widgets/kids_background.dart';
 import '../widgets/language_switcher.dart';
 import 'activity_detail_screen.dart';
 import 'add_report_screen.dart';
+import 'assessment_screen.dart';
 import 'reports_screen.dart';
 
 class ParentHomeScreen extends StatefulWidget {
@@ -51,6 +52,12 @@ class _ParentHomeScreenState extends State<ParentHomeScreen> {
 
   List<Widget> _activitiesContent(BuildContext context) {
     return [
+      _RetakeAssessmentBanner(onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => const AssessmentScreen(),
+        ));
+      }),
+      const SizedBox(height: 16),
       _SectionHeader(title: 'Vidéos', onSeeAll: () {}),
       const SizedBox(height: 8),
       SizedBox(
@@ -463,6 +470,74 @@ class _AddReportButton extends StatelessWidget {
                       fontWeight: FontWeight.w800)),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class _RetakeAssessmentBanner extends StatelessWidget {
+  final VoidCallback onTap;
+  const _RetakeAssessmentBanner({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF60A5FA), Color(0xFF818CF8)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF60A5FA).withOpacity(0.35),
+              blurRadius: 14,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 42,
+              height: 42,
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Icon(Icons.refresh_rounded, color: Colors.white),
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Refaire l'évaluation",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(height: 2),
+                  Text(
+                    '50 questions • 5 domaines',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Colors.white),
+          ],
         ),
       ),
     );
