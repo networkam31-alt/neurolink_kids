@@ -331,15 +331,27 @@ class _ScenarioEmotionGameState extends State<_ScenarioEmotionGame> {
 
   int _i = 0;
   bool _celebrate = false;
+  late List<_Emotion> _opts;
+
+  @override
+  void initState() {
+    super.initState();
+    _generateOpts();
+  }
+
+  void _generateOpts() {
+    final s = _scenarios[_i];
+    final pool = [..._emotions]..shuffle();
+    _opts = [
+      _emotions.firstWhere((e) => e.name == s.emotion),
+      ...pool.where((e) => e.name != s.emotion).take(2),
+    ]..shuffle();
+  }
 
   @override
   Widget build(BuildContext context) {
     final s = _scenarios[_i];
-    final pool = [..._emotions]..shuffle();
-    final opts = [
-      _emotions.firstWhere((e) => e.name == s.emotion),
-      ...pool.where((e) => e.name != s.emotion).take(2),
-    ]..shuffle();
+    final opts = _opts;
     return ActivityShell(
       title: 'Émotions',
       child: Stack(children: [
@@ -384,6 +396,7 @@ class _ScenarioEmotionGameState extends State<_ScenarioEmotionGame> {
                               setState(() {
                                 _i = (_i + 1) % _scenarios.length;
                                 _celebrate = false;
+                                _generateOpts();
                               });
                             }
                           });

@@ -251,7 +251,7 @@ class _MatchFamilyGameState extends State<_MatchFamilyGame> {
                   for (final o in _options)
                     GestureDetector(
                       onTap: () {
-                        if (o.name == _target.name) {
+                        if (o.role == _target.role) {
                           AppStateScope.of(context).addStars(1);
                           setState(() => _celebrate = true);
                           Future.delayed(
