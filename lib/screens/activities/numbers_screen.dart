@@ -90,7 +90,7 @@ class _CountObjectsGameState extends State<_CountObjectsGame> {
     _count = 1 + _rng.nextInt(5);
     _emoji = _emojis[_rng.nextInt(_emojis.length)];
     final wrong1 = _count + 1;
-    final wrong2 = max(1, _count - 1);
+    final wrong2 = _count > 1 ? _count - 1 : _count + 2;
     _options = [_count, wrong1, wrong2]..shuffle(_rng);
     _celebrate = false;
   }
@@ -214,10 +214,11 @@ class _NumberMatchingGameState extends State<_NumberMatchingGame> {
 
   void _next() {
     _target = 1 + _rng.nextInt(5);
-    final pool = <int>{_target, _target + 1, max(1, _target - 1), _target + 2}
+    final pool = <int>{_target + 1, max(1, _target - 1), _target + 2}
+        .where((v) => v != _target)
         .toList()
       ..shuffle(_rng);
-    _options = pool.take(3).toList();
+    _options = [_target, ...pool.take(2)]..shuffle(_rng);
     _celebrate = false;
   }
 
