@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {
   static const Color primary = Color(0xFF4F8FFB);
@@ -51,16 +50,16 @@ class AppTheme {
         secondary: AppColors.accentTeal,
         surface: Colors.white,
       ),
-      textTheme: GoogleFonts.nunitoTextTheme(base.textTheme).apply(
+      textTheme: base.textTheme.apply(
         bodyColor: AppColors.textDark,
         displayColor: AppColors.textDark,
       ),
-      appBarTheme: AppBarTheme(
+      appBarTheme: const AppBarTheme(
         backgroundColor: Colors.white,
         foregroundColor: AppColors.textDark,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: GoogleFonts.nunito(
+        titleTextStyle: TextStyle(
           color: AppColors.textDark,
           fontWeight: FontWeight.w800,
           fontSize: 20,
