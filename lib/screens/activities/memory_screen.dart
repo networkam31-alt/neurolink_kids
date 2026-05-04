@@ -26,6 +26,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
   int _seconds = 0;
   Timer? _timer;
   bool _busy = false;
+  int _generation = 0;
 
   static const _animalSet = ['🐶', '🐱', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯'];
   static const _letterSet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
@@ -44,6 +45,7 @@ class _MemoryScreenState extends State<MemoryScreen> {
   }
 
   void _start() {
+    _generation++;
     final pairs = (_grid / 2).floor();
     final source = switch (_theme) {
       _Theme.animals => _animalSet,
@@ -86,8 +88,9 @@ class _MemoryScreenState extends State<MemoryScreen> {
         }
       } else {
         _busy = true;
+        final gen = _generation;
         Future.delayed(const Duration(milliseconds: 700), () {
-          if (!mounted) return;
+          if (!mounted || gen != _generation) return;
           setState(() {
             _flipped[a] = false;
             _flipped[i] = false;
