@@ -1,0 +1,9 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    prefer_const_constructors: false
+    prefer_const_literals_to_create_immutables: false
+    prefer_const_constructors_in_immutables: false
+    use_super_parameters: false
+    sort_child_properties_last: false
